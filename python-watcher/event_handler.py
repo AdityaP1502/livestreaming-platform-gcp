@@ -68,10 +68,12 @@ class UploadHandler():
             for i, t in enumerate(self._threads):
                 if not t.is_alive():
                     removed_idx.append(i)
-                
+                    
+            removed_idx.reverse()
+            
             for idx in removed_idx:
                 if self._threads[idx].exc is not None:
-                    print(f"[ERROR] Uploading files failed. {self._threads[idx].exc}")
+                    print(f"[ERROR] Uploading files failed. \n {self._threads[idx].exc}")
                     
                 del self._threads[idx]
                 self.max_concurrent_thread -= 1
