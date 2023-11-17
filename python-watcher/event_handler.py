@@ -36,7 +36,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
 class UploaderThread(threading.Thread):
     def __init__(self, group = None, target = None, name = None, args = ..., kwargs = None, *, daemon = None) -> None:
         super().__init__(group, target, name, args, kwargs, daemon=daemon)
-        self.exc = None
+        self.exc : BaseException = None
     
     def join(self, timeout = None) -> None:
         super().join(timeout)
@@ -62,20 +62,19 @@ class UploadHandler():
         print(type(self._terminate))
     
     def _watcher(self):
-        t : threading.Thread
         
         while True:
             removed_idx = []
             for i, t in enumerate(self._threads):
-                if not t.is_alive:
+                if not t.is_alive():
                     removed_idx.append(i)
                 
             for idx in removed_idx:
                 if self._threads[idx].exc is not None:
-                    print("[ERROR] Uploading files failed")
+                    print(f"[ERROR] Uploading files failed. {self._threads[idx].exc}")
                     
                 del self._threads[idx]
-                self.max_concurrent_thread -= 1 
+                self.max_concurrent_thread -= 1
                 
             with self._terminate.get_lock():
                 if self._terminate.value == 1:
