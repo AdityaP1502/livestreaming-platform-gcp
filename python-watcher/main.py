@@ -22,6 +22,6 @@ if __name__ == "__main__":
             time.sleep(1)
     finally:
         print("[INFO : Main] CTRL + C is pressed.")
+        event_handler.stop_upload_hanlder()
         observer.stop()
         observer.join()
-        event_handler.stop_upload_hanlder()
