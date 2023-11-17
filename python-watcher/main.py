@@ -21,5 +21,7 @@ if __name__ == "__main__":
         while True:
             time.sleep(1)
     finally:
+        print("[INFO : Main] CTRL + C is pressed.")
         observer.stop()
         observer.join()
+        event_handler.stop_upload_hanlder()
