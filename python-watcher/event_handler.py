@@ -34,7 +34,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
         f"[INFO]: File {source_file_name} uploaded to {destination_blob_name}."
     )
 class UploaderThread(threading.Thread):
-    def __init__(self, group, target = None, name = None, args = ..., kwargs = None, *, daemon = None) -> None:
+    def __init__(self, group = None, target = None, name = None, args = ..., kwargs = None, *, daemon = None) -> None:
         super().__init__(group, target, name, args, kwargs, daemon=daemon)
         self.exc = None
     
