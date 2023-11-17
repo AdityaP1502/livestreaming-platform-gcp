@@ -5,8 +5,6 @@ a modified event takes place
 import platform
 import threading
 from multiprocessing import Value
-from collections.abc import Callable, Iterable, Mapping
-from typing import Any
 
 from watchdog.events import FileSystemEventHandler, FileSystemEvent, FileSystemMovedEvent
 from google.cloud import storage
@@ -36,11 +34,11 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
         f"[INFO]: File {source_file_name} uploaded to {destination_blob_name}."
     )
 class UploaderThread(threading.Thread):
-    def __init__(self, group: None = None, target: Callable[..., object] | None = None, name: str | None = None, args: Iterable[Any] = ..., kwargs: Mapping[str, Any] | None = None, *, daemon: bool | None = None) -> None:
+    def __init__(self, group, target = None, name = None, args = ..., kwargs = None, *, daemon = None) -> None:
         super().__init__(group, target, name, args, kwargs, daemon=daemon)
         self.exc = None
     
-    def join(self, timeout: float | None = None) -> None:
+    def join(self, timeout = None) -> None:
         super().join(timeout)
         
         if self.exc is not None:
