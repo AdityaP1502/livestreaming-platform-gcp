@@ -11,6 +11,9 @@ env/
 __pycache__
 *.pyc
 
+# any log files
+*.log
+
 
 
 
