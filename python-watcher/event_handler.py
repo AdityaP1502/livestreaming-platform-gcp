@@ -121,7 +121,7 @@ class UploadHandler():
         print("[INFO : Upload Handler] All thread are closed successfully")
 
 class GoogleStorageHandler(FileSystemEventHandler):
-    BUCKET_NAME = "hls-manifest"
+    BUCKET_NAME = "hls-stream-belajar-1-404607"
 
     def __init__(self) -> None:
         super().__init__()
