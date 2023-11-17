@@ -1,0 +1,16 @@
+# exclude any hls manifest or segment files
+*.ts
+*.m3u8
+stream/**
+
+# exclude any env files
+*.env
+env/
+
+# exclude python cache files
+__pycache__
+*.pyc
+
+
+
+
