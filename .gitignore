@@ -21,3 +21,7 @@ __pycache__
 # any binary files
 *.exe
 *.o
+
+# any temp files
+tmp/**
+.tmp
