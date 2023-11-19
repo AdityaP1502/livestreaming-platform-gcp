@@ -6,8 +6,8 @@ import platform
 import threading
 from multiprocessing import Value
 
-from watchdog.events import FileSystemEventHandler, FileSystemEvent, FileSystemMovedEvent
 from google.cloud import storage
+from watchdog.events import FileSystemEventHandler, FileSystemEvent, FileSystemMovedEvent
 
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
     """Uploads a file to the bucket."""
@@ -17,7 +17,7 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     # source_file_name = "local/path/to/file"
     # The ID of your GCS object
     # destination_blob_name = "storage-object-name"
-    print(f"[INFO]: Received upload job {source_file_name} -> {destination_blob_name}")
+    print(f"[INFO] Received upload job {source_file_name} -> {destination_blob_name}")
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
@@ -31,8 +31,9 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     
     blob.upload_from_filename(source_file_name)
     print(
-        f"[INFO]: File {source_file_name} uploaded to {destination_blob_name}."
+        f"[INFO] File {source_file_name} uploaded to {destination_blob_name}."
     )
+
 class UploaderThread(threading.Thread):
     def __init__(self, group = None, target = None, name = None, args = ..., kwargs = None, *, daemon = None) -> None:
         super().__init__(group, target, name, args, kwargs, daemon=daemon)
@@ -51,6 +52,7 @@ class UploaderThread(threading.Thread):
             self.ret = self._target(*self._args, **self._kwargs)
         except BaseException as e:
             self.exc = e
+
 class UploadHandler():
     def __init__(self, max_concurrent_thread = 5) -> None:
         self.num_threads_active = 0
@@ -73,7 +75,7 @@ class UploadHandler():
             
             for idx in removed_idx:
                 if self._threads[idx].exc is not None:
-                    print(f"[ERROR] Uploading files failed. \n {self._threads[idx].exc}")
+                    print(f"[ERROR] Uploading files failed.\n{self._threads[idx].exc}")
                     
                 del self._threads[idx]
                 self.max_concurrent_thread -= 1
@@ -122,14 +124,27 @@ class UploadHandler():
         print("[INFO : Upload Handler] All thread are closed successfully")
 
 class GoogleStorageHandler(FileSystemEventHandler):
-    BUCKET_NAME = "hls-stream-belajar-1-404607"
-
-    def __init__(self) -> None:
+    def __init__(self, bucket_name, bucket_path) -> None:
         super().__init__()
+
+        if bucket_name == "":
+            raise ValueError("Bucket name is an empty string.")
+        
+        if bucket_path == "" :
+            raise ValueError("Bucket path is an empty string.")
+
         self._upload_handler = UploadHandler()
-    
+
+        self._bucket_name = bucket_name
+        self._bucket_path = bucket_path
+
+        
+
     def stop_upload_hanlder(self):
-        self._upload_handler.stop()
+        try:
+            self._upload_handler.stop()
+        except:
+            pass
         
     def on_modified(self, event : FileSystemEvent):
         if not event.is_directory:
@@ -145,9 +160,9 @@ class GoogleStorageHandler(FileSystemEventHandler):
                 #     destination_blob_name=f'stream/{filename}'
                 # )
                 self._upload_handler.upload_file(
-                    bucket_name=self.BUCKET_NAME,
+                    bucket_name=self._bucket_name,
                     source_file_name=event.src_path,
-                    destination_blob_name=f'stream/{filename}'
+                    destination_blob_name=f'{self._bucket_path}/{filename}' # stream/username/streamid/{filename}
                 )
                  
     def on_moved(self, event : FileSystemMovedEvent):
@@ -167,7 +182,7 @@ class GoogleStorageHandler(FileSystemEventHandler):
             # )
             
             self._upload_handler.upload_file(
-                    bucket_name=self.BUCKET_NAME,
+                    bucket_name=self._bucket_name,
                     source_file_name=event.dest_path,
-                    destination_blob_name=f'stream/{filename}'
+                    destination_blob_name=f'{self._bucket_path}/{filename}' # stream/username/streamid/{filename}
             )
