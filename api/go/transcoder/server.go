@@ -10,7 +10,10 @@ import (
 
 func InitServer(port int, ip string) base.Server {
 	r := mux.NewRouter()
+
 	r.HandleFunc("/init", initTranscoderHandler).Methods("POST")
+	r.HandleFunc("/end", terminateTranscoderHandler).Methods("POST")
+
 	apiServer := base.Server{
 		Port: port,
 		IP:   ip,
