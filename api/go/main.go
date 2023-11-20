@@ -1,37 +1,46 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"log"
 	"os"
+	"strconv"
 
+	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/base"
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/transcoder"
+	"github.com/joho/godotenv"
 )
 
-func isFlagValid(mode string, port int, ip string) error {
-	// TODO: Create an error when the flag is wrong
-	return nil
-}
-
 func main() {
-	var serverMode string
-	var serverPort int
-	var serverIP string
+	var server base.Server
 
-	flag.StringVar(&serverMode, "server-mode", "", "The server mode that going to be run (required)")
-	flag.StringVar(&serverIP, "ip", "", "The server ip (required)")
-	flag.IntVar(&serverPort, "port", -1, "The server port (required)")
+	err := godotenv.Load()
 
-	flag.Parse()
-
-	err := isFlagValid(serverMode, serverPort, serverIP)
-
-	// TODO: Create a better exit when there are errors
 	if err != nil {
-		os.Exit(1)
+		log.Fatal("Error loading .env files")
 	}
 
-	server := transcoder.InitServer(serverPort, serverIP)
+	var serverMode string = os.Getenv("SERVER_MODE")
+
+	serverPort, err := strconv.Atoi(os.Getenv("SERVER_PORT"))
+
+	if err != nil {
+		log.Fatal("Error getting server port from .env " + err.Error())
+	}
+
+	var serverIP string = os.Getenv("SERVER_IP")
+
+	switch serverMode {
+	case "transcoder":
+		server = transcoder.InitServer(serverPort, serverIP)
+
+	case "api":
+		panic("Function hasn't been implemented yet.")
+
+	default:
+		panic("Unrecognized server mode.")
+	}
+
 	go server.Start()
 	fmt.Printf("Server is running on %s:%d\n", server.IP, server.Port)
 
