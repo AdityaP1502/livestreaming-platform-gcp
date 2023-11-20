@@ -2,12 +2,19 @@ import sys
 import time
 import logging
 import getopt
+import signal
 
 from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
 from event_handler import GoogleStorageHandler
 
 BUCKET_NAME="hls-stream-belajar-1-404607"
+
+def sigterm_handler(signal, frame):
+    print("[INFO] Received SIGTERM signal")
+    sys.exit(0)
+
+signal.signal(signalnum=signal.SIGTERM, handler=sigterm_handler)
 
 if __name__ == "__main__":
     bucket_path=''
