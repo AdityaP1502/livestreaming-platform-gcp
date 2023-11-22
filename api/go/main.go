@@ -5,8 +5,10 @@ import (
 	"log"
 	"os"
 	"strconv"
+	"sync"
 
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/base"
+	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/public"
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/transcoder"
 	"github.com/joho/godotenv"
 )
@@ -35,14 +37,21 @@ func main() {
 		server = transcoder.InitServer(serverPort, serverIP)
 
 	case "api":
-		panic("Function hasn't been implemented yet.")
+		server = public.InitServer(serverPort, serverIP)
 
 	default:
 		panic("Unrecognized server mode.")
 	}
 
-	go server.Start()
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	go func() {
+		defer wg.Done()
+		server.Start()
+	}()
+
 	fmt.Printf("Server is running on %s:%d\n", server.IP, server.Port)
 
-	select {}
+	wg.Wait()
 }
