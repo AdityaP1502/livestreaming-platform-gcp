@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/base"
-	util "github.com/AdityaP1502/livestreaming-platform-gcp/api/go/util/json"
+	jsonutil "github.com/AdityaP1502/livestreaming-platform-gcp/api/go/util/json"
 )
 
 type StreamRequest struct {
@@ -33,7 +33,7 @@ func checkHTTPRequest(r *http.Request) (base.Response, StreamRequest, error) {
 	}
 
 	var request StreamRequest
-	err := util.DecodeJSONBody(r.Body, &request)
+	err := jsonutil.DecodeJSONBody(r.Body, &request)
 	if err != nil {
 		return base.Response{
 			Status:     "fail",
@@ -75,7 +75,7 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 		}
 
 		if response.Status == "fail" {
-			jsonResponse, err := util.CreateJSONResponse(response)
+			jsonResponse, err := jsonutil.CreateJSONResponse(response)
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				return
@@ -170,7 +170,7 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 			response.Message = "transcoder server successfully terminated"
 		}
 
-		jsonResponse, err := util.CreateJSONResponse(response)
+		jsonResponse, err := jsonutil.CreateJSONResponse(response)
 
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
