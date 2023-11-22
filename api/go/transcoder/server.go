@@ -20,6 +20,7 @@ func InitServer(port int, ip string) base.Server {
 		Start: func() {
 			http.ListenAndServe(fmt.Sprintf("%s:%d", ip, port), r)
 		},
+		App: nil,
 	}
 
 	return apiServer
