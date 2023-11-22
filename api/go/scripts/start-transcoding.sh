@@ -13,8 +13,8 @@ DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 
 # create a new directory
 STREAM_DIR=$DIR/../../../$STORAGE_LINK
-LOG_DIR=$DIR/../../../logs/$STORAGE_LINK
-TEMP_DIR=$DIR/../../../tmp/$STORAGE_LINK
+LOG_DIR=$HOME/.local/transcoder/logs/$STORAGE_LINK
+TEMP_DIR=$HOME/.local/transcoder/temp/$STORAGE_LINK
 
 echo "The stream will be placed in $STREAM_DIR"
 echo "The log files can be found in $LOG_DIR"
