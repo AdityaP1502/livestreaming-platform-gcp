@@ -9,6 +9,16 @@ from multiprocessing import Value
 from google.cloud import storage
 from watchdog.events import FileSystemEventHandler, FileSystemEvent, FileSystemMovedEvent
 
+def delete_blob(bucket_name, blob_directory):
+    client = storage.Client()
+    bucket = client.get_bucket(bucket_name)
+
+    blobs = bucket.list_blobs(prefix=blob_directory)
+
+    for blob in blobs:
+        blob.delete()
+
+    
 def upload_blob(bucket_name, source_file_name, destination_blob_name):
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
@@ -90,7 +100,7 @@ class UploadHandler():
             print(f"[INFO : Watcher] Joining thread - {i + 1} / {len(self._threads)}")
             
             try:
-                t.join(timeout=1)
+                t.join(timeout=10)
             except:
                 pass
             
