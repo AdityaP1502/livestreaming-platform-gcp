@@ -11,7 +11,7 @@ done
 DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 
 # create a new directory
-TEMP_DIR=$DIR/../../../tmp/$STORAGE_LINK
+TEMP_DIR=$HOME/.local/transcoder/temp/$STORAGE_LINK
 
 TRANSCODER_PID=$(cat $TEMP_DIR/transcoder.tmp)
 WATCHER_PID=$(cat $TEMP_DIR/watcher.tmp)
