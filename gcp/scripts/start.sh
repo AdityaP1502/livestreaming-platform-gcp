@@ -14,4 +14,4 @@ JSON_STRING=$( jq -n \
 echo "$JSON_STRING" > file.json
 echo $TRANSCODER_LB_IP
 echo $JSON_STRING
-curl -X POST -H "Content-Type: application/json"  -d "$JSON_STRING" $TRANSCODER_LB_IP:8080/init
+curl -X POST -H "Content-Type: application/json"  -d "$JSON_STRING" $TRANSCODER_LB_IP:8080/init < /dev/null
