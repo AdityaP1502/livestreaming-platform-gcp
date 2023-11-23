@@ -9,6 +9,8 @@ import (
 	"strings"
 	"time"
 
+	// "time"
+
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/base"
 	jsonutil "github.com/AdityaP1502/livestreaming-platform-gcp/api/go/util/json"
 )
@@ -17,8 +19,6 @@ type StreamRequest struct {
 	StreamLink  string `json:"stream-link"`
 	StorageLink string `json:"storage-link"`
 }
-
-var API_URL string = os.Getenv("API_URL")
 
 func checkHTTPRequest(r *http.Request) (base.Response, StreamRequest, error) {
 	contentType := r.Header.Get("Content-Type")
@@ -64,6 +64,66 @@ func checkHTTPRequest(r *http.Request) (base.Response, StreamRequest, error) {
 	return base.Response{Status: "success"}, request, nil
 }
 
+func sendPatchApiReq(sr StreamRequest) {
+	apiUrl := os.Getenv("API_URL")
+
+	requestURL := fmt.Sprintf("http://%s/%s", apiUrl, sr.StorageLink)
+	payload := `{"status":"active"}`
+
+	req, err := http.NewRequest(http.MethodPatch, requestURL, strings.NewReader(payload))
+	if err != nil {
+		fmt.Println("Failed to send PATCH request to API server." + err.Error())
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Failed to send PATCH request to API server." + err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 200 {
+		return
+	}
+
+	fmt.Printf("Failed to send PATCH request to API server.Get %d status response", resp.StatusCode)
+}
+
+func sendDeleteApiReq(sr StreamRequest) {
+	apiUrl := os.Getenv("API_URL")
+
+	requestURL := fmt.Sprintf("http://%s/%s", apiUrl, sr.StorageLink)
+
+	req, err := http.NewRequest(http.MethodDelete, requestURL, strings.NewReader(""))
+
+	if err != nil {
+		fmt.Println("Failed to send PATCH request to API server." + err.Error())
+		return
+	}
+
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Failed to send DELETE request to API server." + err.Error())
+		return
+	}
+
+	defer resp.Body.Close()
+
+	if resp.StatusCode == 200 {
+		return
+	}
+
+	fmt.Printf("Failed to send DELETE request to API server.Get %d status response", resp.StatusCode)
+}
+
 func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
@@ -101,28 +161,16 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 		// 	"-hls_segment_filename '../../stream/%s/%%d.ts' '../../stream/%s/index.m3u8'",
 		// 	request.StreamLink, request.StorageLink, request.StorageLink)
 
-		go func() {
-			// cmd := exec.Command(
-			// 	"/bin/sh",
-			// 	path+"/scripts/start-transcoding.sh",
-			// 	request.StreamLink,
-			// 	request.StorageLink,
-			// )
-
-			cmd := exec.Command(
-				"./scripts/start-transcoding.sh",
-				request.StreamLink,
-				request.StorageLink,
-			)
+		startScriptfnc := func(cmd *exec.Cmd, sendApiReq func(sr StreamRequest)) {
 
 			cmd.Stdout = os.Stdout
 
-			if !initTranscoder {
-				cmd = exec.Command(
-					"./scripts/end-transcoding.sh",
-					request.StorageLink,
-				)
-			}
+			// if !initTranscoder {
+			// 	cmd = exec.Command(
+			// 		"./scripts/end-transcoding.sh",
+			// 		request.StorageLink,
+			// 	)
+			// }
 
 			fmt.Println(cmd)
 
@@ -137,32 +185,52 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 			// send HTTP post request to the api
 			// in the format of API_URL/{username}/{stream-id}
 
-			requestURL := fmt.Sprintf("%s/%s", API_URL, request.StorageLink)
-			payload := `{"active":"true"}`
+			// apiUrl := os.Getenv("API_URL")
 
-			req, err := http.NewRequest("PATCH", requestURL, strings.NewReader(payload))
-			if err != nil {
-				fmt.Println("Failed to send PATCH request to API server." + err.Error())
-				return
-			}
+			// requestURL := fmt.Sprintf("http://%s/%s", apiUrl, request.StorageLink)
+			// payload := `{"status":"active"}`
 
-			req.Header.Set("Content-Type", "application/json")
-			client := &http.Client{}
+			// req, err := http.NewRequest(http.MethodPatch, requestURL, strings.NewReader(payload))
+			// if err != nil {
+			// 	fmt.Println("Failed to send PATCH request to API server." + err.Error())
+			// 	return
+			// }
 
-			resp, err := client.Do(req)
-			if err != nil {
-				fmt.Println("Failed to send PATCH request to API server." + err.Error())
-				return
-			}
+			// req.Header.Set("Content-Type", "application/json")
+			// client := &http.Client{}
 
-			defer resp.Body.Close()
+			// resp, err := client.Do(req)
+			// if err != nil {
+			// 	fmt.Println("Failed to send PATCH request to API server." + err.Error())
+			// 	return
+			// }
 
-			if resp.StatusCode == 200 {
-				return
-			}
+			// defer resp.Body.Close()
 
-			fmt.Printf("Failed to send PATCH request to API server.Get %d status response", resp.StatusCode)
-		}()
+			// if resp.StatusCode == 200 {
+			// 	return
+			// }
+
+			// fmt.Printf("Failed to send PATCH request to API server.Get %d status response", resp.StatusCode)
+			sendApiReq(request)
+		}
+
+		if !initTranscoder {
+			cmd := exec.Command(
+				"./scripts/end-transcoding.sh",
+				request.StorageLink,
+			)
+
+			go startScriptfnc(cmd, sendDeleteApiReq)
+
+		} else {
+			cmd := exec.Command(
+				"./scripts/start-transcoding.sh",
+				request.StreamLink,
+				request.StorageLink,
+			)
+			go startScriptfnc(cmd, sendPatchApiReq)
+		}
 
 		response.Message = "transcoder server successfully created"
 
