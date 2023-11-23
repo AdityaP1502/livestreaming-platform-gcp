@@ -3,8 +3,10 @@
 *.m3u8
 stream/**
 
-# exclude any env files
+# exclude any env files except template.env
+# But allow template.env
 *.env
+!template.env
 env/
 
 # exclude python cache files
