@@ -68,10 +68,6 @@ if __name__ == "__main__":
         observer.stop()
         observer.join()
 
-        # delete all the stream
-        print(f"[INFO] Removing {path} directory and all of its contents") 
-        shutil.rmtree(path, ignore_errors=True)
-
         # delete any stream in the bucket
         delete_blob(bucket_name=BUCKET_NAME, blob_directory=bucket_path)
         
