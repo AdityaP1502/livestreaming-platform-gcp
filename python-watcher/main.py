@@ -9,7 +9,7 @@ from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
 from event_handler import GoogleStorageHandler, delete_blob
 
-BUCKET_NAME="hls-stream-belajar-1-404607"
+BUCKET_NAME="hls-stream-ltkalivestream"
 
 def sigterm_handler(signal, frame):
     print("[INFO] Received SIGTERM signal")
