@@ -28,9 +28,10 @@ mkdir -p $TEMP_DIR
 pushd /usr/local/python-watcher
 
 # echo python3 main.py --input=$STREAM_DIR --output=$STORAGE_LINK
-
+source ./venv/bin/activate
 python3 main.py --input=$STREAM_DIR --output=$STORAGE_LINK > $LOG_DIR/watcher/output.log 2>&1 < /dev/null &
 WATCHER_PID=$!
+deactivate
 
 # run ffmpeg 
 ffmpeg -nostdin -i $STREAM_LINK \
