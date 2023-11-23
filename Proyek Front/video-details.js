@@ -13,10 +13,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (Hls.isSupported()) {
             const hls = new Hls();
-            hls.loadSource('your_hls_stream_url.m3u8');
+            hls.loadSource(videoUrl);
             hls.attachMedia(video);
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            video.src = 'your_hls_stream_url.m3u8';
+            video.src = videoUrl;
         }
         // Function to toggle fullscreen
     const toggleFullscreen = () => {
@@ -30,9 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
             video.msRequestFullscreen();
         }
     };
-
-
-
+    
     document.addEventListener('DOMContentLoaded', function () {
     video.addEventListener('click', toggleFullscreen);
     
