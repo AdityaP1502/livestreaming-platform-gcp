@@ -16,7 +16,7 @@ import (
 func main() {
 	var server base.Server
 
-	err := godotenv.Load()
+	err := godotenv.Load("/usr/local/bin/.env")
 
 	if err != nil {
 		log.Fatal("Error loading .env files")
