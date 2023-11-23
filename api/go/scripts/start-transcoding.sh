@@ -12,9 +12,9 @@ done
 DIR=$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )
 
 # create a new directory
-STREAM_DIR=$HOME/.local/transcoder/$STORAGE_LINK
-LOG_DIR=$HOME/.local/transcoder/logs/$STORAGE_LINK
-TEMP_DIR=$HOME/.local/transcoder/temp/$STORAGE_LINK
+STREAM_DIR=/usr/local/transcoder/$STORAGE_LINK
+LOG_DIR=usr/local/transcoder/logs/$STORAGE_LINK
+TEMP_DIR=usr/local/transcoder/temp/$STORAGE_LINK
 
 echo "The stream will be placed in $STREAM_DIR"
 echo "The log files can be found in $LOG_DIR"
@@ -25,7 +25,7 @@ mkdir -p $LOG_DIR/watcher
 mkdir -p $TEMP_DIR
 
 # Run watcher
-pushd $DIR/../../../python-watcher
+pushd /usr/local/python-watcher
 
 # echo python3 main.py --input=$STREAM_DIR --output=$STORAGE_LINK
 
