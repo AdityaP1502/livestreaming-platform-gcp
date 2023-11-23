@@ -217,7 +217,7 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 
 		if !initTranscoder {
 			cmd := exec.Command(
-				"./scripts/end-transcoding.sh",
+				"/usr/local/scripts/end-transcoding.sh",
 				request.StorageLink,
 			)
 
@@ -225,7 +225,7 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 
 		} else {
 			cmd := exec.Command(
-				"./scripts/start-transcoding.sh",
+				"/usr/local/scripts/start-transcoding.sh",
 				request.StreamLink,
 				request.StorageLink,
 			)
