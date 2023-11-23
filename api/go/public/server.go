@@ -10,6 +10,7 @@ import (
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/base"
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/util/db"
 	"github.com/gorilla/mux"
+	"github.com/rs/cors"
 )
 
 func InitServer(port int, ip string) base.Server {
@@ -40,11 +41,20 @@ func InitServer(port int, ip string) base.Server {
 	r.HandleFunc("/stream/{username}/{stream-id}/metadata", handler.updateStreamMetadataHandler).Methods("PATCH")
 	r.HandleFunc("/stream/{username}/{stream-id}", handler.endStreamHandler).Methods("DELETE")
 
+	corsHandler := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"Content-Type", "Authorization"},
+		ExposedHeaders:   []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           86400, // time in seconds
+	}).Handler(r)
+
 	apiServer := base.Server{
 		Port: port,
 		IP:   ip,
 		Start: func() {
-			http.ListenAndServe(fmt.Sprintf("%s:%d", ip, port), r)
+			http.ListenAndServe(fmt.Sprintf("%s:%d", ip, port), corsHandler)
 		},
 
 		App: &app,
