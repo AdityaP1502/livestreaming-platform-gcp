@@ -1,0 +1,45 @@
+/* style.css */
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.video-card {
+    display: flex;
+    margin-bottom: 20px;
+    text-decoration: none; /* Remove default underline for anchor tags */
+    color: #333; /* Set the text color for the card */
+}
+
+.video-card:hover {
+    background-color: #f5f5f5; /* Add a background color on hover */
+}
+
+.thumbnail {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.username {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #666;
+}
+
+.date {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #999;
+}
