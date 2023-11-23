@@ -734,7 +734,7 @@ func (sh *ServerHandler) getStreamHandler(w http.ResponseWriter, r *http.Request
 
 		v := base.DataField{
 			"username":   username,
-			"stream-url": streamURL,
+			"stream-url": fmt.Sprintf("%s/index.m3u8", streamURL),
 			"metadata": base.DataField{
 				"title":     title,
 				"createdAt": createdAt,
