@@ -32,6 +32,9 @@ def upload_blob(bucket_name, source_file_name, destination_blob_name):
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
     
+    # Set Cache-Control header to disable caching
+    blob.cache_control = "no-store"
+    
     # Optional: set a generation-match precondition to avoid potential race conditions
     # and data corruptions. The request to upload is aborted if the object's
     # generation number does not match your precondition. For a destination
