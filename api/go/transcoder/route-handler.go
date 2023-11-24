@@ -233,6 +233,7 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 		}
 
 		response.Message = "transcoder server successfully created"
+		response.Data = base.DataField{"vm-ip": os.Getenv("VM_IP")}
 
 		if !initTranscoder {
 			response.Message = "transcoder server successfully terminated"
