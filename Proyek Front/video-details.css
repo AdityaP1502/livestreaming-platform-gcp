@@ -17,14 +17,19 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
+    padding-bottom: 56.25%; /* 16:9 aspect ratio for responsive design */
+    position: relative;
   }
 
 .videoPlayer {
     width: 100%;
-    height: auto;
+    height: 100%;
     display: block;
-    border: 1px solid #ccc;
-  }
+    border: none; /* Remove border */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 
 
 /* Style the controls (play, pause, etc.) */
