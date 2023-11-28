@@ -1,5 +1,5 @@
 const videoCardContainer = document.getElementById('videoList');
-let video_http = "http://34.101.36.32:8000/stream";
+let video_http = "http://35.219.123.51:8000/stream";
 fetch(video_http)
 .then(res => res.json())
 .then(data => {
