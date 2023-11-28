@@ -19,7 +19,7 @@ def start_streaming(username):
     json_login = json.dumps(user_data)
     login_headers = {'Content-Type': 'application/json'}
 
-    api_url = "http://34.101.36.32:8000/stream"
+    api_url = "http://35.219.123.51:8000/stream"
 
     response = requests.post(api_url, data=json_login, headers=login_headers)
 
@@ -44,7 +44,7 @@ def start_streaming(username):
 # Function to stop streaming
 def stop_streaming(username):
 
-    api_url = f"http://34.101.36.32:8000/stream/{username}/{stream_id}"
+    api_url = f"http://35.219.123.51:8000/stream/{username}/{stream_id}"
 
     response = requests.delete(api_url)
 
@@ -132,7 +132,7 @@ def upload_desc(username, title_entry):
     json_title = json.dumps(user_title)
     title_headers = {'Content-Type': 'application/json'}
 
-    api_url = f"http://34.101.36.32:8000/stream/{username}/{stream_id}/metadata"
+    api_url = f"http://35.219.123.51:8000/stream/{username}/{stream_id}/metadata"
 
     pict_upload = [f'curl', '-X', 'PUT','-H', 'Content-Type: image/png', '--upload-file', pict_path, bucket_url]
     subprocess.Popen(pict_upload)
@@ -181,7 +181,7 @@ def check_login(username, password):
     json_login = json.dumps(login_data)
     login_headers = {'Content-Type': 'application/json'}
 
-    api_url = "http://34.101.36.32:8000/login"
+    api_url = "http://35.219.123.51:8000/login"
 
     response = requests.post(api_url, data=json_login, headers=login_headers)
 
