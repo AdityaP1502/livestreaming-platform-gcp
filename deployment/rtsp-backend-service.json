@@ -1,0 +1,25 @@
+{
+  "backends": [
+    {
+      "balancingMode": "CONNECTION",
+      "failover": false,
+      "group": "projects/ltkalivestream/zones/asia-southeast2-a/instanceGroups/stream-mig"
+    }
+  ],
+  "connectionDraining": {
+    "drainingTimeoutSec": 300
+  },
+  "failoverPolicy": {},
+  "healthChecks": [
+    "projects/ltkalivestream/regions/asia-southeast2/healthChecks/stream-lb-health-check"
+  ],
+  "loadBalancingScheme": "EXTERNAL",
+  "localityLbPolicy": "MAGLEV",
+  "logConfig": {
+    "enable": false
+  },
+  "name": "stream-lb",
+  "protocol": "TCP",
+  "region": "projects/ltkalivestream/regions/asia-southeast2",
+  "sessionAffinity": "NONE"
+}

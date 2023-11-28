@@ -1,0 +1,26 @@
+{
+  "backends": [
+    {
+      "balancingMode": "CONNECTION",
+      "failover": false,
+      "group": "projects/ltkalivestream/zones/asia-southeast2-a/instanceGroups/transcoder-mig"
+    }
+  ],
+  "connectionDraining": {
+    "drainingTimeoutSec": 300
+  },
+  "description": "",
+  "failoverPolicy": {},
+  "healthChecks": [
+    "projects/ltkalivestream/global/healthChecks/transcoder-health-check"
+  ],
+  "loadBalancingScheme": "INTERNAL",
+  "logConfig": {
+    "enable": false
+  },
+  "name": "transcoder-lb",
+  "network": "projects/ltkalivestream/global/networks/livestream-network",
+  "protocol": "TCP",
+  "region": "projects/ltkalivestream/regions/asia-southeast2",
+  "sessionAffinity": "NONE"
+}

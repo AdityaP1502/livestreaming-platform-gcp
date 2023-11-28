@@ -1,0 +1,14 @@
+{
+  "IPAddress": "34.101.111.114",
+  "IPProtocol": "TCP",
+  "backendService": "projects/ltkalivestream/regions/asia-southeast2/backendServices/stream-lb",
+  "description": "",
+  "ipVersion": "IPV4",
+  "loadBalancingScheme": "EXTERNAL",
+  "name": "stream-lb-forwarding-rule",
+  "networkTier": "PREMIUM",
+  "ports": [
+    "8554"
+  ],
+  "region": "projects/ltkalivestream/regions/asia-southeast2"
+}

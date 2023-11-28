@@ -1,0 +1,16 @@
+{
+  "IPAddress": "192.168.200.2",
+  "IPProtocol": "TCP",
+  "allowGlobalAccess": false,
+  "backendService": "projects/ltkalivestream/regions/asia-southeast2/backendServices/transcoder-lb",
+  "description": "",
+  "ipVersion": "IPV4",
+  "loadBalancingScheme": "INTERNAL",
+  "name": "transcoder-lb-forwarding-rule",
+  "networkTier": "PREMIUM",
+  "ports": [
+    "8080"
+  ],
+  "region": "projects/ltkalivestream/regions/asia-southeast2",
+  "subnetwork": "projects/ltkalivestream/regions/asia-southeast2/subnetworks/transcoder-subnet"
+}
