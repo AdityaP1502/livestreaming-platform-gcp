@@ -3,6 +3,7 @@ package transcoder
 import (
 	"fmt"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"os/exec"
@@ -14,6 +15,23 @@ import (
 	"github.com/AdityaP1502/livestreaming-platform-gcp/api/go/base"
 	jsonutil "github.com/AdityaP1502/livestreaming-platform-gcp/api/go/util/json"
 )
+
+// GetLocalIP returns the non loopback local IP of the host
+func GetLocalIP() string {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return ""
+	}
+	for _, address := range addrs {
+		// check the address type and if it is not a loopback the display it
+		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				return ipnet.IP.String()
+			}
+		}
+	}
+	return ""
+}
 
 type StreamRequest struct {
 	StreamLink  string `json:"stream-link"`
@@ -91,7 +109,7 @@ func sendPatchApiReq(sr StreamRequest) {
 		return
 	}
 
-	fmt.Printf("Failed to send PATCH request to API server.Get %d status response", resp.StatusCode)
+	fmt.Printf("Failed to send PATCH request to API server.Get %d status response\n", resp.StatusCode)
 }
 
 func sendDeleteApiReq(sr StreamRequest) {
@@ -121,13 +139,15 @@ func sendDeleteApiReq(sr StreamRequest) {
 		return
 	}
 
-	fmt.Printf("Failed to send DELETE request to API server.Get %d status response", resp.StatusCode)
+	fmt.Printf("Failed to send DELETE request to API server.Get %d status response\n", resp.StatusCode)
 }
 
 func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *http.Request) {
+	vm_ip := GetLocalIP()
+	fmt.Println("The local ip of the server is:", vm_ip)
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-
 		response, request, err := checkHTTPRequest(r)
 
 		if err != nil {
@@ -233,7 +253,7 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 		}
 
 		response.Message = "transcoder server successfully created"
-		response.Data = base.DataField{"ip": os.Getenv("VM_IP")}
+		response.Data = base.DataField{"ip": vm_ip}
 
 		if !initTranscoder {
 			response.Message = "transcoder server successfully terminated"
