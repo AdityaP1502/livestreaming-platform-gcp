@@ -145,9 +145,9 @@ def upload_desc(username, title_entry):
         desc_window.withdraw()
 
         ffmpeg_command = [
-        'ffmpeg', '-video_size', '1920x1080', '-f', 'gdigrab', '-re', '-i', 'desktop',
-        '-vcodec', 'libx264', '-tune', 'zerolatency', '-preset', 'ultrafast',
-        '-f', 'rtsp', rtsp_url]
+        'ffmpeg', '-video_size', '1366x768', '-f', 'gdigrab', '-i', 'desktop',
+        '-vcodec', 'libx264', '-tune', 'zerolatency', '-preset', 'ultrafast', 
+        '-f', 'rtsp', '-rtsp_transport', 'tcp', rtsp_url]
 
         global p
         p = subprocess.Popen(ffmpeg_command)
