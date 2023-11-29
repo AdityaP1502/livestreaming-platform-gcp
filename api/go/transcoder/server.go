@@ -11,6 +11,9 @@ import (
 func InitServer(port int, ip string) base.Server {
 	r := mux.NewRouter()
 
+	initTranscoderHandler := createTranscoderHandler(true)
+	terminateTranscoderHandler := createTranscoderHandler(false)
+
 	r.HandleFunc("/init", initTranscoderHandler).Methods("POST")
 	r.HandleFunc("/end", terminateTranscoderHandler).Methods("POST")
 

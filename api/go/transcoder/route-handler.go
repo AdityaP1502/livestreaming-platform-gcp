@@ -272,10 +272,10 @@ func createTranscoderHandler(initTranscoder bool) func(http.ResponseWriter, *htt
 }
 
 // http handler
-func initTranscoderHandler(w http.ResponseWriter, r *http.Request) {
-	createTranscoderHandler(true)(w, r)
-}
+// func initTranscoderHandler(w http.ResponseWriter, r *http.Request) {
+// 	createTranscoderHandler(true)(w, r)
+// }
 
-func terminateTranscoderHandler(w http.ResponseWriter, r *http.Request) {
-	createTranscoderHandler(false)(w, r)
-}
+// func terminateTranscoderHandler(w http.ResponseWriter, r *http.Request) {
+// 	createTranscoderHandler(false)(w, r)
+// }
