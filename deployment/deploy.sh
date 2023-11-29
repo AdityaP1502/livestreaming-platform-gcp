@@ -3,6 +3,7 @@
 
 DB_INSTANCE_NAME="ltkalivestream"
 
+gcloud compute instances start public-api --zone=asia-southeast2-a
 gcloud sql instances patch $DB_INSTANCE_NAME --activation-policy=ALWAYS
 
 while [[ $(gcloud sql instances describe $DB_INSTANCE_NAME --format="value(sqlServerDatabaseEngine.version)") == "SQL_SERVER_2019" ]]; do
