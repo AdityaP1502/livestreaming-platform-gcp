@@ -41,7 +41,7 @@ ffmpeg -nostdin -i $STREAM_LINK \
   -c:a copy \
   -f hls \
   -hls_time 1 \
-  -hls_list_size 3 \
+  -hls_list_size 20 \
   -hls_segment_type mpegts \
   -hls_segment_filename $STREAM_DIR/%d.ts \
   $STREAM_DIR/index.m3u8 > $LOG_DIR/output.log 2>&1 < /dev/null &
